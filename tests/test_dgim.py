@@ -15,7 +15,7 @@ class TestDgim(unittest.TestCase):
 
     def test_get_count_without_update(self):
         crt_timestamp = 65
-        #hand built dgim
+        # hand built dgim
         buckets = [
             Bucket(crt_timestamp - 1, 1),
             Bucket(crt_timestamp - 2, 1),
