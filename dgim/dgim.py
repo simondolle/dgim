@@ -72,7 +72,11 @@ class Dgim(object):
         last_bucket = buckets[-1]
         for bucket in buckets[0:-1]:
             result += bucket.one_count
-        result += (last_bucket.one_count)/2
+        if last_bucket.one_count == 1:
+            #It is not possible to cut a bucket of size 1
+            result += last_bucket.one_count
+        else:
+            result += last_bucket.one_count/2
         return result
 
 class Bucket(object):
