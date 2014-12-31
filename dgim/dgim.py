@@ -28,16 +28,17 @@ class Dgim(object):
         :param elt: the latest element of the stream
         :type elt: int
         """
+        self.timestamp += 1
         #check if oldest bucket should be removed
         if (len(self.buckets) > 0 and
-                self.buckets[-1].most_recent_timestamp < self.timestamp - self.N):
-            self.buckets = self.buckets[:-2]
+                self.buckets[-1].most_recent_timestamp <= self.timestamp - self.N):
+            self.buckets = self.buckets[:-1]
         if elt != 1:
-            self.timestamp += 1
             return
         reminder = Bucket(self.timestamp, 1)
         new_buckets = []
         for k, crt_buckets in itertools.groupby(self.buckets, key=lambda x: x.one_count):
+
             if reminder is not None:
                 crt_buckets = [reminder] + list(crt_buckets)
             else:
@@ -54,7 +55,6 @@ class Dgim(object):
         if reminder is not None:
             new_buckets.append(reminder)
         self.buckets = new_buckets
-        self.timestamp += 1
 
     def get_count(self):
         """Returns an estimate of the number of ones in the sliding window.
@@ -63,7 +63,7 @@ class Dgim(object):
         #find the all the buckets which most recent timestamp is ok
         buckets = []
         for bucket in self.buckets:
-            if bucket.most_recent_timestamp < self.timestamp - self.N:
+            if bucket.most_recent_timestamp <= self.timestamp - self.N:
                 break
             buckets.append(bucket)
         if len(buckets) == 0:
@@ -78,6 +78,7 @@ class Dgim(object):
         else:
             result += last_bucket.one_count/2
         return result
+
 
 class Bucket(object):
     """A class to represent a bucket."""
