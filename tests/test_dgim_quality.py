@@ -57,8 +57,10 @@ class TestDgimQuality(unittest.TestCase):
         for elt in self.generate_random_stream(stream_length):
             dgim.update(elt)
             exact_algorithm.update(elt)
-            self.assertTrue(0.5 * exact_algorithm.get_count() <= dgim.get_count())
-            self.assertTrue(dgim.get_count() <= 1.5 * exact_algorithm.get_count())
+
+            exact_result = exact_algorithm.get_count()
+            error = abs(dgim.get_count() - exact_result)
+            self.assertTrue(float(error) <= 0.5 * exact_result)
 
     def test_nominal_case(self):
         self.check_quality_settings(N=100, stream_length=1000)
