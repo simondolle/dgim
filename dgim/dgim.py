@@ -13,14 +13,29 @@ class Dgim(object):
     http://infolab.stanford.edu/~ullman/mmds/ch4.pdf
     """
 
-    def __init__(self, N):
+    def __init__(self, N, r=2):
         """Constructor
         :param N: size of the sliding window
         :type N: int
+        :param r: the maximum number of buckets of the same size
+        :type r: int
         """
         self.N = N
+        if r < 2:
+            raise ValueError("'r' should be higher or equal to 2. Got {}.".format(r))
+        self.r = r
         self.buckets = []
         self.timestamp = 0
+
+    @property
+    def error_rate(self):
+        """Return the maximum error rate made by the algorithm.
+        Let c be the true result and e the estimate returned by the dgim
+        algorithm.
+        abs(c-e) < error_rate * c
+        :returns: float
+        """
+        return 1/float(self.r)
 
     def update(self, elt):
         """Update the stream with one element.
@@ -43,13 +58,13 @@ class Dgim(object):
                 crt_buckets = [reminder] + list(crt_buckets)
             else:
                 crt_buckets = list(crt_buckets)
-            if len(crt_buckets) <= 2:
+            if len(crt_buckets) <= self.r:
                 reminder = None
                 new_buckets.extend(crt_buckets)
-            elif len(crt_buckets) == 3:
-                new_buckets.append(crt_buckets[0])
-                crt_buckets[1].merge(crt_buckets[2])
-                reminder = crt_buckets[1]
+            elif len(crt_buckets) == self.r + 1:
+                new_buckets.extend(crt_buckets[:-2])
+                crt_buckets[-2].merge(crt_buckets[-1])
+                reminder = crt_buckets[-2]
             else:
                 raise ValueError("Too many elements")
         if reminder is not None:
