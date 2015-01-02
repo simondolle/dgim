@@ -76,22 +76,17 @@ class Dgim(object):
         :returns: int
         """
         #find the all the buckets which most recent timestamp is ok
-        buckets = []
-        for bucket in self.buckets:
-            if bucket.most_recent_timestamp <= self.timestamp - self.N:
-                break
-            buckets.append(bucket)
-        if len(buckets) == 0:
-            return 0
         result = 0
-        last_bucket = buckets[-1]
-        for bucket in buckets[0:-1]:
-            result += bucket.one_count
-        if last_bucket.one_count == 1:
-            #It is not possible to cut a bucket of size 1
-            result += last_bucket.one_count
-        else:
-            result += last_bucket.one_count/2
+        value = 0
+        min_timestamp = self.timestamp - self.N
+        for bucket in self.buckets:
+            #break once we have found an old bucket
+            if bucket.most_recent_timestamp <= min_timestamp:
+                break
+            value = bucket.one_count
+            result += value
+        #remove half the value of the last processed bucket.
+        result -= value/2
         return result
 
 
