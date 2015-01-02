@@ -51,25 +51,25 @@ class Dgim(object):
         if elt != 1:
             return
         reminder = Bucket(self.timestamp, 1)
-        new_buckets = []
+        buckets = []
+        new_buckets_len = 0
         for k, crt_buckets in itertools.groupby(self.buckets, key=lambda x: x.one_count):
-
+            old_buckets_len = new_buckets_len
             if reminder is not None:
-                crt_buckets = [reminder] + list(crt_buckets)
-            else:
-                crt_buckets = list(crt_buckets)
-            if len(crt_buckets) <= self.r:
+                buckets.append(reminder)
                 reminder = None
-                new_buckets.extend(crt_buckets)
-            elif len(crt_buckets) == self.r + 1:
-                new_buckets.extend(crt_buckets[:-2])
-                crt_buckets[-2].merge(crt_buckets[-1])
-                reminder = crt_buckets[-2]
-            else:
-                raise ValueError("Too many elements")
+            for bucket in crt_buckets:
+                buckets.append(bucket)
+
+            new_buckets_len = len(buckets)
+            if new_buckets_len - old_buckets_len == self.r + 1:
+                last = buckets.pop()
+                last_previous = buckets.pop()
+                last_previous.merge(last)
+                reminder = last_previous
         if reminder is not None:
-            new_buckets.append(reminder)
-        self.buckets = new_buckets
+            buckets.append(reminder)
+        self.buckets = buckets
 
     def get_count(self):
         """Returns an estimate of the number of ones in the sliding window.
