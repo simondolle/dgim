@@ -41,7 +41,7 @@ class TestDgimQuality(unittest.TestCase):
         for i in range(length):
             yield random.randint(0, 1)
 
-    def check_quality_settings(self, N, stream_length):
+    def check_quality_settings(self, N, r, stream_length, max_error_rate):
         """Compare the result "e" returned by dgim with the exact result
         "c" on a random stream.
         The test fails if the dgim result "e" is not in the expected bounds.
@@ -49,10 +49,14 @@ class TestDgimQuality(unittest.TestCase):
 
         :param N: sliding window length
         :type N: int
+        :param r: the maximum number of buckets of the same size
+        :type r: int
         :param stream_length: the length of the random stream
         :type stream_length: int
+        :param max_error_rate: the theoretical maximum error rate
+        :type max_error_rate: float
         """
-        dgim = Dgim(N)
+        dgim = Dgim(N, r)
         exact_algorithm = ExactAlgorithm(N)
         for elt in self.generate_random_stream(stream_length):
             dgim.update(elt)
@@ -60,20 +64,23 @@ class TestDgimQuality(unittest.TestCase):
 
             exact_result = exact_algorithm.get_count()
             error = abs(dgim.get_count() - exact_result)
-            self.assertTrue(float(error) <= 0.5 * exact_result)
+            self.assertTrue(error <= max_error_rate * exact_result)
 
     def test_nominal_case(self):
-        self.check_quality_settings(N=100, stream_length=1000)
+        self.check_quality_settings(N=100, r=2, stream_length=1000, max_error_rate=0.5)
 
     def test_large_N(self):
-        self.check_quality_settings(N=10000, stream_length=20000)
+        self.check_quality_settings(N=10000, r=2, stream_length=20000, max_error_rate=0.5)
 
     def test_short_stream(self):
         # stream is shorter than N
-        self.check_quality_settings(N=1000, stream_length=100)
+        self.check_quality_settings(N=1000, r=2, stream_length=100, max_error_rate=0.5)
 
     def test_N_is_one(self):
-        self.check_quality_settings(N=1, stream_length=10)
+        self.check_quality_settings(N=1, r=2, stream_length=10, max_error_rate=0.5)
 
     def test_N_is_two(self):
-        self.check_quality_settings(N=2, stream_length=100)
+        self.check_quality_settings(N=2, r=2, stream_length=100, max_error_rate=0.5)
+
+    def test_low_error_rate_case(self):
+        self.check_quality_settings(N=100, r=100, stream_length=1000, max_error_rate=0.01)
