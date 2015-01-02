@@ -1,4 +1,5 @@
 import itertools
+import math
 
 class Dgim(object):
     """An implementation of the DGIM algorithm.
@@ -86,7 +87,7 @@ class Dgim(object):
             value = bucket.one_count
             result += value
         #remove half the value of the last processed bucket.
-        result -= value/2
+        result -= math.floor(value/2)
         return result
 
 
