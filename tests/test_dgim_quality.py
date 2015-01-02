@@ -1,5 +1,6 @@
 import unittest
 import random
+import itertools
 from dgim.dgim import Dgim
 
 class ExactAlgorithm(object):
@@ -91,3 +92,7 @@ class TestDgimQuality(unittest.TestCase):
     def test_low_error_rate_case(self):
         stream = generate_random_stream(length=1000)
         self.check_quality_settings(N=100, r=100, stream=stream, max_error_rate=0.01)
+
+    def test_only_ones_case(self):
+        stream = itertools.repeat(1, 10000)
+        self.check_quality_settings(N=100, r=2, stream=stream, max_error_rate=0.5)
