@@ -1,5 +1,5 @@
 import unittest
-
+import itertools
 from dgim.dgim import Dgim, Bucket
 
 
@@ -72,3 +72,9 @@ class TestDgim(unittest.TestCase):
         self.assertEquals(3, len(dgim.buckets))
         dgim.update(0)
         self.assertEquals(2, len(dgim.buckets))
+
+    def test_only_zeros(self):
+        dgim = Dgim(10)
+        for elt in itertools.repeat(0, 1000):
+            dgim.update(elt)
+            self.assertEqual(0, dgim.get_count())
