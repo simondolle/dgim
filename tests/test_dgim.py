@@ -85,3 +85,6 @@ class TestDgim(unittest.TestCase):
 
         dgim = Dgim(10, 10)
         self.assertEqual(0.1, dgim.error_rate)
+
+    def test_invalid_r(self):
+        self.assertRaises(ValueError, Dgim, 10, 1)

@@ -21,6 +21,8 @@ class Dgim(object):
         :type r: int
         """
         self.N = N
+        if r < 2:
+            raise ValueError("'r' should be higher or equal to 2. Got {}.".format(r))
         self.r = r
         self.buckets = []
         self.timestamp = 0
