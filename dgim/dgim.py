@@ -25,6 +25,16 @@ class Dgim(object):
         self.buckets = []
         self.timestamp = 0
 
+    @property
+    def error_rate(self):
+        """Return the maximum error rate made by the algorithm.
+        Let c be the true result and e the estimate returned by the dgim
+        algorithm.
+        abs(c-e) < error_rate * c
+        :returns: float
+        """
+        return 1/float(self.r)
+
     def update(self, elt):
         """Update the stream with one element.
         The element can be either 0 or 1.
