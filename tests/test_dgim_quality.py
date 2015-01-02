@@ -1,7 +1,8 @@
 import unittest
-import random
 import itertools
 from dgim.dgim import Dgim
+from dgim.utils import generate_random_stream
+
 
 class ExactAlgorithm(object):
     """Exact algorithm to count the number of ones
@@ -29,16 +30,6 @@ class ExactAlgorithm(object):
         :returns: int
         """
         return sum(self.sliding_window)
-
-
-def generate_random_stream(length):
-    """Generate a random stream of zeros and ones.
-    :param length: the stream length
-    :type length: int
-    :returns: iterator
-    """
-    for i in range(length):
-        yield random.randint(0, 1)
 
 
 class TestDgimQuality(unittest.TestCase):

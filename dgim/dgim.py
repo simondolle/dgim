@@ -1,4 +1,5 @@
 import itertools
+import math
 
 class Dgim(object):
     """An implementation of the DGIM algorithm.
@@ -51,47 +52,42 @@ class Dgim(object):
         if elt != 1:
             return
         reminder = Bucket(self.timestamp, 1)
-        new_buckets = []
+        buckets = []
+        new_buckets_len = 0
         for k, crt_buckets in itertools.groupby(self.buckets, key=lambda x: x.one_count):
-
+            old_buckets_len = new_buckets_len
             if reminder is not None:
-                crt_buckets = [reminder] + list(crt_buckets)
-            else:
-                crt_buckets = list(crt_buckets)
-            if len(crt_buckets) <= self.r:
+                buckets.append(reminder)
                 reminder = None
-                new_buckets.extend(crt_buckets)
-            elif len(crt_buckets) == self.r + 1:
-                new_buckets.extend(crt_buckets[:-2])
-                crt_buckets[-2].merge(crt_buckets[-1])
-                reminder = crt_buckets[-2]
-            else:
-                raise ValueError("Too many elements")
+            for bucket in crt_buckets:
+                buckets.append(bucket)
+
+            new_buckets_len = len(buckets)
+            if new_buckets_len - old_buckets_len == self.r + 1:
+                last = buckets.pop()
+                last_previous = buckets.pop()
+                last_previous.merge(last)
+                reminder = last_previous
         if reminder is not None:
-            new_buckets.append(reminder)
-        self.buckets = new_buckets
+            buckets.append(reminder)
+        self.buckets = buckets
 
     def get_count(self):
         """Returns an estimate of the number of ones in the sliding window.
         :returns: int
         """
         #find the all the buckets which most recent timestamp is ok
-        buckets = []
-        for bucket in self.buckets:
-            if bucket.most_recent_timestamp <= self.timestamp - self.N:
-                break
-            buckets.append(bucket)
-        if len(buckets) == 0:
-            return 0
         result = 0
-        last_bucket = buckets[-1]
-        for bucket in buckets[0:-1]:
-            result += bucket.one_count
-        if last_bucket.one_count == 1:
-            #It is not possible to cut a bucket of size 1
-            result += last_bucket.one_count
-        else:
-            result += last_bucket.one_count/2
+        value = 0
+        min_timestamp = self.timestamp - self.N
+        for bucket in self.buckets:
+            #break once we have found an old bucket
+            if bucket.most_recent_timestamp <= min_timestamp:
+                break
+            value = bucket.one_count
+            result += value
+        #remove half the value of the last processed bucket.
+        result -= math.floor(value/2)
         return result
 
 
