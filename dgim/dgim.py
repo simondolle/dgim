@@ -1,6 +1,5 @@
-import itertools
 import math
-from collections import namedtuple
+from collections import deque
 
 class Dgim(object):
     """An implementation of the DGIM algorithm.
@@ -26,7 +25,15 @@ class Dgim(object):
         if r < 2:
             raise ValueError("'r' should be higher or equal to 2. Got {}.".format(r))
         self.r = r
-        self.buckets = []
+        self.queues = []
+        if N == 0:
+            max_index = -1
+        else:
+            max_index = int(math.ceil(math.log(N)/math.log(2)))
+
+        for i in range(max_index + 1):
+            self.queues.append(deque())
+
         self.timestamp = 0
 
     @property
@@ -39,6 +46,16 @@ class Dgim(object):
         """
         return 1/float(self.r)
 
+    @property
+    def nb_buckets(self):
+        """Returns the number of buckets.
+        :returns: int
+        """
+        result = 0
+        for queue in self.queues:
+            result += len(queue)
+        return result
+
     def update(self, elt):
         """Update the stream with one element.
         The element can be either 0 or 1.
@@ -47,54 +64,56 @@ class Dgim(object):
         """
         self.timestamp += 1
         #check if oldest bucket should be removed
-        if (len(self.buckets) > 0 and
-                self.buckets[-1].most_recent_timestamp <= self.timestamp - self.N):
-            self.buckets = self.buckets[:-1]
+        if self.is_oldest_bucket_too_old():
+            self.drop_oldest_bucket()
         if elt != 1:
             return
-        reminder = Bucket(self.timestamp, 1)
-        buckets = []
-        new_buckets_len = 0
-        for k, crt_buckets in itertools.groupby(self.buckets, key=lambda x: x.one_count):
-            old_buckets_len = new_buckets_len
-            if reminder is not None:
-                buckets.append(reminder)
-                reminder = None
-            for bucket in crt_buckets:
-                buckets.append(bucket)
+        reminder = self.timestamp
+        for queue in self.queues:
+            queue.appendleft(reminder)
+            if len(queue) <= self.r:
+                break
+            last = queue.pop()
+            last_previous = queue.pop()
+            reminder = max(last, last_previous)
 
-            new_buckets_len = len(buckets)
-            if new_buckets_len - old_buckets_len == self.r + 1:
-                last = buckets.pop()
-                last_previous = buckets.pop()
-                reminder = merge_buckets(last, last_previous)
-        if reminder is not None:
-            buckets.append(reminder)
-        self.buckets = buckets
+    def is_oldest_bucket_too_old(self):
+        """Check if the latest bucket is too old and should be dropped.
+        :returns: bool
+        """
+        oldest_bucket_timestamp = self.get_oldest_bucket_timestamp()
+        return (oldest_bucket_timestamp >= 0 and
+                oldest_bucket_timestamp <= self.timestamp - self.N)
+
+    def drop_oldest_bucket(self):
+        """Drop oldest bucket timestamp."""
+        for queue in reversed(self.queues):
+            if len(queue) > 0:
+                queue.pop()
+                break
+
+    def get_oldest_bucket_timestamp(self):
+        """Return the timestamp of the oldest bucket.
+        If there is no bucket, returns -1
+        :returns: int
+        """
+        for queue in reversed(self.queues):
+            if len(queue) > 0:
+                return queue[-1]
+        return -1
 
     def get_count(self):
         """Returns an estimate of the number of ones in the sliding window.
         :returns: int
         """
-        #find the all the buckets which most recent timestamp is ok
         result = 0
-        value = 0
-        min_timestamp = self.timestamp - self.N
-        for bucket in self.buckets:
-            #break once we have found an old bucket
-            if bucket.most_recent_timestamp <= min_timestamp:
-                break
-            value = bucket.one_count
-            result += value
-        #remove half the value of the last processed bucket.
-        result -= math.floor(value/2)
-        return result
-
-
-Bucket = namedtuple("Bucket", ['most_recent_timestamp', 'one_count'])
-
-def merge_buckets(bucket1, bucket2):
-    return Bucket(
-            max(bucket1.most_recent_timestamp, bucket2.most_recent_timestamp),
-            bucket1.one_count + bucket2.one_count
-    )
+        max_value = 0
+        power_of_two = 1
+        for queue in self.queues:
+            queue_length = len(queue)
+            if queue_length > 0:
+                max_value = power_of_two
+                result += queue_length * power_of_two
+            power_of_two = power_of_two << 1
+        result -= math.floor(max_value/2)
+        return int(result)
