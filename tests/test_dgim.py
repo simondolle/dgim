@@ -1,6 +1,7 @@
 import unittest
 import itertools
-from dgim.dgim import Dgim, Bucket
+from collections import deque
+from dgim.dgim import Dgim
 
 
 class TestDgim(unittest.TestCase):
@@ -15,18 +16,16 @@ class TestDgim(unittest.TestCase):
         """Example from chapter 4 of "Mining of Massing Datasets"""
         crt_timestamp = 65
         # hand built dgim
-        buckets = [
-            Bucket(crt_timestamp - 1, 1),
-            Bucket(crt_timestamp - 2, 1),
-            Bucket(crt_timestamp - 4, 2),
-            Bucket(crt_timestamp - 8, 4),
-            Bucket(crt_timestamp - 13, 8),
-            Bucket(crt_timestamp - 21, 8)
+        queues = [
+            deque([crt_timestamp - 1, crt_timestamp - 2]),
+            deque([crt_timestamp - 4]),
+            deque([crt_timestamp - 8]),
+            deque()
         ]
+
         dgim = Dgim(10)
         dgim.timestamp = crt_timestamp
-        dgim.buckets = buckets
-
+        dgim.queues = queues
         self.assertEquals(6, dgim.get_count())
 
     def test_count_empty_stream(self):
@@ -59,19 +58,19 @@ class TestDgim(unittest.TestCase):
     def test_bucket_drop(self):
         crt_timestamp = 65
         # hand built dgim
-        buckets = [
-            Bucket(crt_timestamp - 1, 1),
-            Bucket(crt_timestamp - 2, 1),
-            Bucket(crt_timestamp - 4, 2),
+        queues = [
+            deque([crt_timestamp - 1, crt_timestamp - 2]),
+            deque([crt_timestamp - 4]),
+            deque()
         ]
         dgim = Dgim(6)
         dgim.timestamp = crt_timestamp
-        dgim.buckets = buckets
-        self.assertEquals(3, len(dgim.buckets))
+        dgim.queues = queues
+        self.assertEquals(3, dgim.nb_buckets)
         dgim.update(0)
-        self.assertEquals(3, len(dgim.buckets))
+        self.assertEquals(3, dgim.nb_buckets)
         dgim.update(0)
-        self.assertEquals(2, len(dgim.buckets))
+        self.assertEquals(2, dgim.nb_buckets)
 
     def test_only_zeros(self):
         dgim = Dgim(10)
