@@ -67,15 +67,17 @@ class Dgim(object):
         if self.is_oldest_bucket_too_old():
             self.drop_oldest_bucket()
         if elt != 1:
+            #nothing to do
             return
+
         reminder = self.timestamp
         for queue in self.queues:
             queue.appendleft(reminder)
             if len(queue) <= self.r:
                 break
             last = queue.pop()
-            last_previous = queue.pop()
-            reminder = max(last, last_previous)
+            second_last = queue.pop()
+            reminder = max(last, second_last)
 
     def is_oldest_bucket_too_old(self):
         """Check if the latest bucket is too old and should be dropped.
