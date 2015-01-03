@@ -106,12 +106,14 @@ class Dgim(object):
         """Returns an estimate of the number of ones in the sliding window.
         :returns: int
         """
-        #find the all the buckets which most recent timestamp is ok
         result = 0
-        max_index = 0
-        for index, queue in enumerate(self.queues):
-            result += len(queue) * int(2 ** index)
-            if len(queue) > 0:
-                max_index = index
-        result -= math.floor((2 ** max_index)/2)
+        max_value = 0
+        power_of_two = 1
+        for queue in self.queues:
+            queue_length = len(queue)
+            if queue_length > 0:
+                max_value = power_of_two
+                result += queue_length * power_of_two
+            power_of_two = power_of_two << 1
+        result -= math.floor(max_value/2)
         return int(result)
