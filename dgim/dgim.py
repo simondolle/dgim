@@ -62,7 +62,8 @@ class Dgim(object):
         :param elt: the latest element of the stream
         :type elt: int
         """
-        self.timestamp += 1
+        if self.N != 0:
+            self.timestamp = (self.timestamp + 1) % (2 * self.N)
         #check if oldest bucket should be removed
         if self.is_bucket_too_old(self.get_oldest_bucket_timestamp()):
             self.drop_oldest_bucket()
@@ -86,8 +87,9 @@ class Dgim(object):
         :type bucket_timestamp: int
         :returns: bool
         """
+        # the buckets are stored modulo 2 * N
         return (bucket_timestamp >= 0 and
-                bucket_timestamp <= self.timestamp - self.N)
+                (self.timestamp - bucket_timestamp) % (2 * self.N) >= self.N)
 
     def drop_oldest_bucket(self):
         """Drop oldest bucket timestamp."""
