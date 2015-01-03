@@ -62,9 +62,10 @@ class Dgim(object):
         :param elt: the latest element of the stream
         :type elt: int
         """
-        self.timestamp += 1
+        if self.N != 0:
+            self.timestamp = (self.timestamp + 1) % (2 * self.N)
         #check if oldest bucket should be removed
-        if self.is_oldest_bucket_too_old():
+        if self.is_bucket_too_old(self.get_oldest_bucket_timestamp()):
             self.drop_oldest_bucket()
         if elt != 1:
             #nothing to do
@@ -78,15 +79,17 @@ class Dgim(object):
             last = queue.pop()
             second_last = queue.pop()
             # merge last two buckets.
-            reminder = max(last, second_last)
+            reminder = second_last
 
-    def is_oldest_bucket_too_old(self):
-        """Check if the latest bucket is too old and should be dropped.
+    def is_bucket_too_old(self, bucket_timestamp):
+        """Check if a bucket is too old and should be dropped.
+        ;param bucket_timestamp: the bucket timestamp
+        :type bucket_timestamp: int
         :returns: bool
         """
-        oldest_bucket_timestamp = self.get_oldest_bucket_timestamp()
-        return (oldest_bucket_timestamp >= 0 and
-                oldest_bucket_timestamp <= self.timestamp - self.N)
+        # the buckets are stored modulo 2 * N
+        return (bucket_timestamp >= 0 and
+                (self.timestamp - bucket_timestamp) % (2 * self.N) >= self.N)
 
     def drop_oldest_bucket(self):
         """Drop oldest bucket timestamp."""

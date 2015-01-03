@@ -87,3 +87,14 @@ class TestDgim(unittest.TestCase):
 
     def test_invalid_r(self):
         self.assertRaises(ValueError, Dgim, 10, 1)
+
+    def test_is_bucket_too_old(self):
+        dgim = Dgim(10)
+        dgim.timestamp = 15
+        self.assertFalse(dgim.is_bucket_too_old(6))
+        self.assertTrue(dgim.is_bucket_too_old(5))
+        self.assertTrue(dgim.is_bucket_too_old(16))
+
+        dgim.timestamp = 5
+        self.assertFalse(dgim.is_bucket_too_old(16))
+        self.assertTrue(dgim.is_bucket_too_old(15))
