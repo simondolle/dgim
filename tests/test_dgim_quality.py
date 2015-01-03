@@ -58,7 +58,7 @@ class TestDgimQuality(unittest.TestCase):
             self.assertTrue(error <= dgim.error_rate * exact_result)
 
     def test_nominal_case(self):
-        stream = generate_random_stream(length=1000)
+        stream = generate_random_stream(length=10000)
         self.check_quality_settings(N=100, r=2, stream=stream)
 
     def test_large_N(self):
