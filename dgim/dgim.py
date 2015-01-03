@@ -77,6 +77,7 @@ class Dgim(object):
                 break
             last = queue.pop()
             second_last = queue.pop()
+            # merge last two buckets.
             reminder = max(last, second_last)
 
     def is_oldest_bucket_too_old(self):
