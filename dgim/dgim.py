@@ -64,7 +64,7 @@ class Dgim(object):
         """
         self.timestamp += 1
         #check if oldest bucket should be removed
-        if self.is_oldest_bucket_too_old():
+        if self.is_bucket_too_old(self.get_oldest_bucket_timestamp()):
             self.drop_oldest_bucket()
         if elt != 1:
             #nothing to do
@@ -80,13 +80,14 @@ class Dgim(object):
             # merge last two buckets.
             reminder = max(last, second_last)
 
-    def is_oldest_bucket_too_old(self):
-        """Check if the latest bucket is too old and should be dropped.
+    def is_bucket_too_old(self, bucket_timestamp):
+        """Check if a bucket is too old and should be dropped.
+        ;param bucket_timestamp: the bucket timestamp
+        :type bucket_timestamp: int
         :returns: bool
         """
-        oldest_bucket_timestamp = self.get_oldest_bucket_timestamp()
-        return (oldest_bucket_timestamp >= 0 and
-                oldest_bucket_timestamp <= self.timestamp - self.N)
+        return (bucket_timestamp >= 0 and
+                bucket_timestamp <= self.timestamp - self.N)
 
     def drop_oldest_bucket(self):
         """Drop oldest bucket timestamp."""
