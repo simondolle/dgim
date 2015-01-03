@@ -79,7 +79,7 @@ class Dgim(object):
             last = queue.pop()
             second_last = queue.pop()
             # merge last two buckets.
-            reminder = max(last, second_last)
+            reminder = second_last
 
     def is_bucket_too_old(self, bucket_timestamp):
         """Check if a bucket is too old and should be dropped.
