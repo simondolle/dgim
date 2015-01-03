@@ -1,5 +1,6 @@
 import itertools
 import math
+from collections import namedtuple
 
 class Dgim(object):
     """An implementation of the DGIM algorithm.
@@ -66,8 +67,7 @@ class Dgim(object):
             if new_buckets_len - old_buckets_len == self.r + 1:
                 last = buckets.pop()
                 last_previous = buckets.pop()
-                last_previous.merge(last)
-                reminder = last_previous
+                reminder = merge_buckets(last, last_previous)
         if reminder is not None:
             buckets.append(reminder)
         self.buckets = buckets
@@ -91,28 +91,10 @@ class Dgim(object):
         return result
 
 
-class Bucket(object):
-    """A class to represent a bucket."""
-    def __init__(self, most_recent_timestamp, one_count):
-        """Constructor
-        :param most_recent_timestamp: the timestamp of the most recent element
-                                      that belongs to the bucket.
-        :type most_recent_timestamp: int
-        :param one_count: the count of ones in this bucket.
-                          It must be a power of 2.
-        """
-        self.most_recent_timestamp = most_recent_timestamp
-        self.one_count = one_count
+Bucket = namedtuple("Bucket", ['most_recent_timestamp', 'one_count'])
 
-    def merge(self, other_bucket):
-        """Merge this bucket with an other bucket.
-        :param other_bucket: the bucket that has to be merged with this one.
-        :type other_bucket: Bucket
-        """
-        self.most_recent_timestamp = max(
-                self.most_recent_timestamp,
-                other_bucket.most_recent_timestamp)
-        self.one_count += other_bucket.one_count
-
-    def __repr__(self):
-        return "Bucket {}: {}".format(self.most_recent_timestamp, self.one_count)
+def merge_buckets(bucket1, bucket2):
+    return Bucket(
+            max(bucket1.most_recent_timestamp, bucket2.most_recent_timestamp),
+            bucket1.one_count + bucket2.one_count
+    )

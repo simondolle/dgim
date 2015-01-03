@@ -8,9 +8,9 @@ def profile_dgim(dgim, stream):
 
 def main():
 
-    N = 100
+    N = 1000000
     r = 2
-    length = 1000000
+    length = 2 * N
 
     dgim = Dgim(N=N, r=r)
     stream = generate_random_stream(length=length)
@@ -18,6 +18,9 @@ def main():
     profile_dgim(dgim, stream)
     time_stop = time.time()
     print "Took: {}s".format(time_stop - time_start)
+    import gc
+    gc.collect()
+    time.sleep(5)
 
 if __name__ == "__main__":
     main()
