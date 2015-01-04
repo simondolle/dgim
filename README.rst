@@ -52,7 +52,7 @@ Custom error rate::
 Documentation
 -------------
 
-* Documentation: https://dgim.readthedocs.org.
+https://dgim.readthedocs.org.
 
 
 License
