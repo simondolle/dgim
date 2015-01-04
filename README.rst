@@ -41,6 +41,7 @@ print "- Dgim estimation: {}".format(dgim_result)
 ```
 
 Custom error rate:
+
 ```
 from dgim.dgim import Dgim
 dgim = Dgim(N=32, error_rate=0.1)
