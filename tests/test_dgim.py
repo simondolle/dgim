@@ -39,7 +39,6 @@ class TestDgim(unittest.TestCase):
         dgim = Dgim(0)
         stream = iter([True, False, False, True])
         for elt in stream:
-            print elt
             dgim.update(elt)
         self.assertEquals(0, dgim.get_count())
 
