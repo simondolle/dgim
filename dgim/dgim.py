@@ -16,17 +16,29 @@ class Dgim(object):
     http://infolab.stanford.edu/~ullman/mmds/ch4.pdf
     """
 
-    def __init__(self, N, r=2):
+    def __init__(self, N, error_rate=0.5):
         """Constructor
         :param N: size of the sliding window
         :type N: int
-        :param r: the maximum number of buckets of the same size
-        :type r: int
+        :param error_rate: the maximum error made by the algorithm.
+        The error rate is in ]0, 1]
+        Let c be the true result and e the estimate returned by the dgim
+        algorithm.
+        abs(c-e) < error_rate * c
+        :type error_rate: float
         """
         self.N = N
-        if r < 2:
-            raise ValueError("'r' should be higher or equal to 2. Got {}.".format(r))
-        self.r = r
+
+        if not (0 < error_rate <= 1):
+            raise ValueError(
+                    "Invalid value for error_rate: {}. Error rate should be in ]0, 1].".format(error_rate))
+
+        self.error_rate = error_rate
+
+        #the maximum number of buckets of the same size
+        self.r = math.ceil(1/error_rate)
+        self.r = max(self.r, 2)
+
         self.queues = []
         if N == 0:
             max_index = -1
@@ -38,16 +50,6 @@ class Dgim(object):
 
         self.timestamp = 0
         self.oldest_bucket_timestamp = -1  # No bucket so far
-
-    @property
-    def error_rate(self):
-        """Return the maximum error rate made by the algorithm.
-        Let c be the true result and e the estimate returned by the dgim
-        algorithm.
-        abs(c-e) < error_rate * c
-        :returns: float
-        """
-        return 1/float(self.r)
 
     @property
     def nb_buckets(self):
