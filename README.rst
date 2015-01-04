@@ -12,7 +12,7 @@ dgim
         :target: https://pypi.python.org/pypi/dgim
 
 
-Compact datastructure to estimate the number of ones in the last elements of a stream.
+Python implementation of the dgim algorithm: Compact datastructure to estimate the number of "True" in the last N elements of a boolean stream.
 
 * Free software: BSD license
 * Documentation: https://dgim.readthedocs.org.
