@@ -82,15 +82,17 @@ class TestDgim(unittest.TestCase):
             dgim.update(elt)
             self.assertEqual(0, dgim.get_count())
 
-    def test_error_rate(self):
-        dgim = Dgim(10, 2)
-        self.assertEqual(0.5, dgim.error_rate)
+    def test_r_computation(self):
+        dgim = Dgim(10, 0.5)
+        self.assertEqual(2, dgim.r)
 
-        dgim = Dgim(10, 10)
-        self.assertEqual(0.1, dgim.error_rate)
+        dgim = Dgim(10, 0.1)
+        self.assertEqual(10, dgim.r)
 
-    def test_invalid_r(self):
-        self.assertRaises(ValueError, Dgim, 10, 1)
+    def test_invalid_error_rates(self):
+        self.assertRaises(ValueError, Dgim, 10, 0)
+        self.assertRaises(ValueError, Dgim, 10, -0.1)
+        self.assertRaises(ValueError, Dgim, 10, 1.1)
 
     def test_is_bucket_too_old(self):
         dgim = Dgim(10)
