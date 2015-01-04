@@ -1,6 +1,6 @@
 import unittest
 import itertools
-from dgim.dgim import Dgim
+from dgim import Dgim
 from dgim.utils import generate_random_stream
 
 

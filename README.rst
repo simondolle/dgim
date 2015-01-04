@@ -32,7 +32,7 @@ Usage
 
 Basic::
 
-  from dgim.dgim import Dgim
+  from dgim import Dgim
   dgim = Dgim(N=32)
   for i in range(100):
       dgim.update(True)
@@ -45,7 +45,7 @@ Basic::
 
 Custom error rate::
 
-  from dgim.dgim import Dgim
+  from dgim import Dgim
   dgim = Dgim(N=32, error_rate=0.1)
   for i in range(100):
       dgim.update(True)

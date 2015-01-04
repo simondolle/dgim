@@ -1,7 +1,7 @@
 import unittest
 import itertools
 from collections import deque
-from dgim.dgim import Dgim
+from dgim import Dgim
 
 
 class TestDgim(unittest.TestCase):

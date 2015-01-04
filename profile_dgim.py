@@ -1,6 +1,6 @@
 import time
 from dgim.utils import generate_random_stream
-from dgim.dgim import Dgim
+from dgim import Dgim
 
 def profile_dgim(dgim, stream):
     for elt in stream:
