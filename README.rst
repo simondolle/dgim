@@ -53,3 +53,9 @@ dgim_result = dgim.get_count() # 30
 print "- Dgim estimation: {}".format(dgim_result)
 ```
 
+References
+----------
+- Datar, Mayur, et al. "Maintaining stream statistics over sliding windows."
+  SIAM Journal on Computing 31.6 (2002): 1794-1813.
+- Rajaraman, Anand, and Jeffrey David Ullman. Mining of massive datasets. Cambridge University Press, 2011. Chapter 4. http://infolab.stanford.edu/~ullman/mmds/ch4.pdf
+- Mining of Massive Datasets Coursera MOOC: http://infolab.stanford.edu/~ullman/mmds/ch4.pdf
