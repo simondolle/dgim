@@ -14,7 +14,7 @@ def measure_update_time(N, iterations):
     bucket_count = 0
     for elt in generate_random_stream(iterations):
         dgim.update(elt)
-        bucket_count += len(dgim.buckets)
+        bucket_count += dgim.nb_buckets
     time_stop = time.time()
     return time_stop - time_start, bucket_count/float(iterations)
 
