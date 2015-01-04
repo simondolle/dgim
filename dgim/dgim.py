@@ -35,6 +35,7 @@ class Dgim(object):
             self.queues.append(deque())
 
         self.timestamp = 0
+        self.oldest_bucket_timestamp = -1  # No bucket so far
 
     @property
     def error_rate(self):
@@ -62,16 +63,19 @@ class Dgim(object):
         :param elt: the latest element of the stream
         :type elt: int
         """
-        if self.N != 0:
-            self.timestamp = (self.timestamp + 1) % (2 * self.N)
+        if self.N == 0:
+            return
+        self.timestamp = (self.timestamp + 1) % (2 * self.N)
         #check if oldest bucket should be removed
-        if self.is_bucket_too_old(self.get_oldest_bucket_timestamp()):
+        if self.is_bucket_too_old(self.oldest_bucket_timestamp):
             self.drop_oldest_bucket()
         if elt != 1:
             #nothing to do
             return
 
         reminder = self.timestamp
+        if self.oldest_bucket_timestamp == -1:
+            self.oldest_bucket_timestamp = self.timestamp
         for queue in self.queues:
             queue.appendleft(reminder)
             if len(queue) <= self.r:
@@ -80,6 +84,8 @@ class Dgim(object):
             second_last = queue.pop()
             # merge last two buckets.
             reminder = second_last
+            if last == self.oldest_bucket_timestamp:
+                self.oldest_bucket_timestamp = second_last
 
     def is_bucket_too_old(self, bucket_timestamp):
         """Check if a bucket is too old and should be dropped.
@@ -97,16 +103,12 @@ class Dgim(object):
             if len(queue) > 0:
                 queue.pop()
                 break
-
-    def get_oldest_bucket_timestamp(self):
-        """Return the timestamp of the oldest bucket.
-        If there is no bucket, returns -1
-        :returns: int
-        """
+        #update oldest bucket timestamp
+        self.oldest_bucket_timestamp = -1
         for queue in reversed(self.queues):
             if len(queue) > 0:
-                return queue[-1]
-        return -1
+                self.oldest_bucket_timestamp = queue[-1]
+                break
 
     def get_count(self):
         """Returns an estimate of the number of ones in the sliding window.

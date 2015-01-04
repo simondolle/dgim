@@ -36,6 +36,7 @@ class TestDgim(unittest.TestCase):
         dgim = Dgim(0)
         stream = iter([1, 0, 0, 1])
         for elt in stream:
+            print elt
             dgim.update(elt)
         self.assertEquals(0, dgim.get_count())
 
@@ -66,6 +67,7 @@ class TestDgim(unittest.TestCase):
         dgim = Dgim(6)
         dgim.timestamp = crt_timestamp
         dgim.queues = queues
+        dgim.oldest_bucket_timestamp = crt_timestamp - 4
         self.assertEquals(3, dgim.nb_buckets)
         dgim.update(0)
         self.assertEquals(3, dgim.nb_buckets)
