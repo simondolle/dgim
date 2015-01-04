@@ -39,6 +39,13 @@ class Dgim(object):
         self.r = math.ceil(1/error_rate)
         self.r = max(self.r, 2)
 
+        # the datastructure to store the buckets
+        # it is an array of queues
+        # queue[i] stores the timestamp of the bucket of size 2^i
+        # in descending order
+        # this structure makes it easy to :
+        # - know how many bucket of the same size there is
+        # - update a queue of bucket
         self.queues = []
         if N == 0:
             max_index = -1
