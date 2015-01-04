@@ -7,7 +7,10 @@ from dgim.dgim import Dgim
 class TestDgim(unittest.TestCase):
     def test_get_count(self):
         dgim = Dgim(12)
-        stream = iter([0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0])
+        stream = iter([
+            False, False, True, False, True, True, True, False, True,
+            True, False, False, True, False, True, True, False
+        ])
         for elt in stream:
             dgim.update(elt)
         self.assertEquals(7, dgim.get_count())
@@ -34,7 +37,7 @@ class TestDgim(unittest.TestCase):
 
     def test_N_is_null(self):
         dgim = Dgim(0)
-        stream = iter([1, 0, 0, 1])
+        stream = iter([True, False, False, True])
         for elt in stream:
             print elt
             dgim.update(elt)
@@ -42,18 +45,18 @@ class TestDgim(unittest.TestCase):
 
     def test_N_is_one(self):
         dgim = Dgim(1)
-        dgim.update(1)
+        dgim.update(True)
         self.assertEqual(1, dgim.get_count())
-        dgim.update(0)
+        dgim.update(False)
         self.assertEqual(0, dgim.get_count())
 
     def test_N_is_two(self):
         dgim = Dgim(2)
-        dgim.update(1)
+        dgim.update(True)
         self.assertEqual(1, dgim.get_count())
-        dgim.update(1)
+        dgim.update(True)
         self.assertEqual(2, dgim.get_count())
-        dgim.update(1)
+        dgim.update(True)
         self.assertEqual(2, dgim.get_count())
 
     def test_bucket_drop(self):
@@ -76,7 +79,7 @@ class TestDgim(unittest.TestCase):
 
     def test_only_zeros(self):
         dgim = Dgim(10)
-        for elt in itertools.repeat(0, 1000):
+        for elt in itertools.repeat(False, 1000):
             dgim.update(elt)
             self.assertEqual(0, dgim.get_count())
 

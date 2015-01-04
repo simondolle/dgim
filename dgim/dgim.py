@@ -3,8 +3,10 @@ from collections import deque
 
 class Dgim(object):
     """An implementation of the DGIM algorithm.
-    It estimates the number of 1s present in a sliding window of a stream
-    while using few memory.
+    It estimates the number of "True" present the last N elements
+    of a boolean stream.
+    The datastructure it uses is very compact and
+    has a memory complexity of O(log(N)^2).
 
     The algorithm is described in:
     Datar, Mayur, et al. "Maintaining stream statistics over sliding windows."
@@ -59,9 +61,8 @@ class Dgim(object):
 
     def update(self, elt):
         """Update the stream with one element.
-        The element can be either 0 or 1.
         :param elt: the latest element of the stream
-        :type elt: int
+        :type elt: bool
         """
         if self.N == 0:
             return
@@ -69,7 +70,7 @@ class Dgim(object):
         #check if oldest bucket should be removed
         if self.oldest_bucket_timestamp >= 0 and self.is_bucket_too_old(self.oldest_bucket_timestamp):
             self.drop_oldest_bucket()
-        if elt != 1:
+        if elt is not True:
             #nothing to do
             return
 

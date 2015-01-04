@@ -5,8 +5,8 @@ from dgim.utils import generate_random_stream
 
 
 class ExactAlgorithm(object):
-    """Exact algorithm to count the number of ones
-    in the last N elements of a stream."""
+    """Exact algorithm to count the number of "True"
+    in the last N elements of a boolean stream."""
     def __init__(self, N):
         """Constructor
         :param N: size of the sliding window
@@ -17,9 +17,8 @@ class ExactAlgorithm(object):
 
     def update(self, elt):
         """Update the stream with one element.
-        The element can be either 0 or 1.
         :param elt: the latest element of the stream
-        :type elt: int
+        :type elt: bool
         """
         self.sliding_window.append(elt)
         if len(self.sliding_window) > self.N:
@@ -82,6 +81,6 @@ class TestDgimQuality(unittest.TestCase):
         stream = generate_random_stream(length=1000)
         self.check_quality_settings(N=100, r=100, stream=stream)
 
-    def test_only_ones_case(self):
-        stream = itertools.repeat(1, 10000)
+    def test_only_true_case(self):
+        stream = itertools.repeat(True, 10000)
         self.check_quality_settings(N=100, r=2, stream=stream)
