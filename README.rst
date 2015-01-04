@@ -88,4 +88,6 @@ References
 - Rajaraman, Anand, and Jeffrey David Ullman. Mining of massive datasets. Cambridge University Press, 2011. Chapter 4. http://infolab.stanford.edu/~ullman/mmds/ch4.pdf
 - Mining of Massive Datasets Coursera MOOC: http://infolab.stanford.edu/~ullman/mmds/ch4.pdf
 
+.. _`the repository`: http://github.com/simondolle/dgim
+.. _AUTHORS: https://github.com/simondolle/dgim/blob/master/AUTHORS.rst
 
