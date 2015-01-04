@@ -32,7 +32,7 @@ Basic::
   dgim = Dgim(N=32)
   for i in range(100):
       dgim.update(True)
-  print "Number of 'True' statements in the last 5 elements"
+  print "Number of 'True' statements in the last 32 elements"
   exact_result = 32
   print "- Exact result : {}".format(exact_result)
   dgim_result = dgim.get_count() # 28
@@ -45,7 +45,7 @@ Custom error rate::
   dgim = Dgim(N=32, error_rate=0.1)
   for i in range(100):
       dgim.update(True)
-  print "Number of 'True' statements in the last 5 elements"
+  print "Number of 'True' statements in the last 32 elements"
   exact_result = 32
   print "- Exact result : {}".format(exact_result)
   dgim_result = dgim.get_count() # 30
