@@ -20,6 +20,13 @@ Features
 * Estimation of the number of "True" statements in the last N element of a boolean stream
 * Configurable error rate
 
+Installation
+------------
+
+At the command line::
+
+    $ pip install dgim
+
 Usage
 -----
 
