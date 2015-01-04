@@ -111,7 +111,8 @@ class Dgim(object):
                 break
 
     def get_count(self):
-        """Returns an estimate of the number of ones in the sliding window.
+        """Returns an estimate of the number of "True"
+        in the last N elements of the stream.
         :returns: int
         """
         result = 0

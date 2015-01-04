@@ -25,7 +25,8 @@ class ExactAlgorithm(object):
             self.sliding_window.pop(0)
 
     def get_count(self):
-        """Returns an estimate of the number of ones in the sliding window.
+        """Returns an estimate of the number of "True"
+        in the last N elements of the stream.
         :returns: int
         """
         return sum(self.sliding_window)
