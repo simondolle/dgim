@@ -67,18 +67,19 @@ License
 
 The project is licensed under the BSD license.
 
-Credits
+Authors
 -------
 
-Development Lead
-================
-
 * Simon Dollé <simon.dolle@gmail.com>
+* No other contributor yet. Why not joining?
 
-Contributors
-============
+How to contribute
+-----------------
 
-None yet. Why not be the first?
+#. Check for open issues or open a fresh issue to start a discussion around a feature idea or a bug.
+#. Fork `the repository`_ on GitHub to start making your changes to the **master** branch (or branch off of it).
+#. Write a test which shows that the bug was fixed or that the feature works as expected.
+#. Send a pull request and bug the maintainer until it gets merged and published. :) Make sure to add yourself to AUTHORS_.
 
 References
 ----------
@@ -86,3 +87,5 @@ References
   SIAM Journal on Computing 31.6 (2002): 1794-1813.
 - Rajaraman, Anand, and Jeffrey David Ullman. Mining of massive datasets. Cambridge University Press, 2011. Chapter 4. http://infolab.stanford.edu/~ullman/mmds/ch4.pdf
 - Mining of Massive Datasets Coursera MOOC: http://infolab.stanford.edu/~ullman/mmds/ch4.pdf
+
+
