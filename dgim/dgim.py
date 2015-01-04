@@ -83,17 +83,17 @@ class Dgim(object):
             #nothing to do
             return
 
-        reminder = self.timestamp
+        carry_over = self.timestamp
         if self.oldest_bucket_timestamp == -1:
             self.oldest_bucket_timestamp = self.timestamp
         for queue in self.queues:
-            queue.appendleft(reminder)
+            queue.appendleft(carry_over)
             if len(queue) <= self.r:
                 break
             last = queue.pop()
             second_last = queue.pop()
             # merge last two buckets.
-            reminder = second_last
+            carry_over = second_last
             if last == self.oldest_bucket_timestamp:
                 self.oldest_bucket_timestamp = second_last
 
