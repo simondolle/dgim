@@ -22,7 +22,7 @@ test_requirements = [
 setup(
     name='dgim',
     version='0.1.0',
-    description='Compact datastructure to estimate the number of ones in the last elements of a stream.',
+    description='Python implementation of the dgim algorithm: Compact datastructure to estimate the number of "True" in the last N elements of a boolean stream.',
     long_description=readme + '\n\n' + history,
     author='Simon Dollé',
     author_email='simon.dolle@gmail.com',
