@@ -67,6 +67,19 @@ License
 
 The project is licensed under the BSD license.
 
+Credits
+-------
+
+Development Lead
+================
+
+* Simon Dollé <simon.dolle@gmail.com>
+
+Contributors
+============
+
+None yet. Why not be the first?
+
 References
 ----------
 - Datar, Mayur, et al. "Maintaining stream statistics over sliding windows."
