@@ -14,9 +14,6 @@ dgim
 
 Python implementation of the dgim algorithm: Compact datastructure to estimate the number of "True" in the last N elements of a boolean stream.
 
-* Free software: BSD license
-* Documentation: https://dgim.readthedocs.org.
-
 Features
 --------
 
@@ -51,6 +48,17 @@ Custom error rate::
   dgim_result = dgim.get_count() # 30
   print "- Dgim estimation: {}".format(dgim_result)
 
+
+Documentation
+-------------
+
+* Documentation: https://dgim.readthedocs.org.
+
+
+License
+-------
+
+The project is licensed under the BSD license.
 
 References
 ----------
