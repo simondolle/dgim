@@ -20,4 +20,5 @@ Python implementation of the dgim algorithm: Compact datastructure to estimate t
 Features
 --------
 
-* TODO
+* Estimation of the number of "True" statements in the last N element of a boolean stream
+* Configurable error rate
