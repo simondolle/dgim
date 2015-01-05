@@ -13,7 +13,7 @@ dgim
 
 
 Python implementation of the DGIM algorithm: 
-a compact datastructure to estimate the number of `True` statements in the last N elements of a boolean stream.
+a compact datastructure to estimate the number of *True* statements in the last N elements of a boolean stream.
 
 Features
 --------
@@ -31,7 +31,7 @@ If N is big or if you have many streams to process, it is not possible to store
 the N latest elements.
 
 In such situations, if the processed stream is made of boolean,
-the DGIM algorithm can help you estimate the number of `True` statements
+the DGIM algorithm can help you estimate the number of *True* statements
 in the last elements.
 
 For instance, if the stream is made of server logs, 
