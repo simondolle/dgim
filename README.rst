@@ -32,6 +32,7 @@ Usage
 -----
 
 Sample code::
+
   from dgim import Dgim
   dgim = Dgim(N=32, error_rate=0.1)
   for i in range(100):
