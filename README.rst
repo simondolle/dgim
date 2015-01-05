@@ -21,6 +21,21 @@ Features
 * Low memory footprint.
 * Tunable error rate (the lower the error rate, the higher the memory footprint)
 
+Applications
+------------
+
+When processing large streams of data such as clicks streams, server logs, financial streams.
+It is often necessary to maintain statistics about the N latest elements.
+If N is big or if you have many streams to process, it is not possible to store
+the N latest elements.
+In such situations, if the processed stream is made of boolean,
+the DGIM algorithm can help you estimate the number of `True` statements
+in the last elements.
+For instance, if the stream is made of server logs, 
+DGIM algorithm can estimate the proportion of visits that come from search engines.
+(as opposed to direct access, or access through paid search)
+
+
 Installation
 ------------
 
