@@ -28,6 +28,7 @@ class Dgim(object):
         Let c be the true result and e the estimate returned by the dgim
         algorithm.
         abs(c-e) < error_rate * c
+        The lower the error, the higher the object footprint.
         :type error_rate: float
         """
         self.N = N
