@@ -27,8 +27,8 @@ class TestDgim(unittest.TestCase):
         ]
 
         dgim = Dgim(10)
-        dgim.timestamp = crt_timestamp
-        dgim.queues = queues
+        dgim._timestamp = crt_timestamp
+        dgim._queues = queues
         self.assertEquals(6, dgim.get_count())
 
     def test_count_empty_stream(self):
@@ -67,9 +67,9 @@ class TestDgim(unittest.TestCase):
             deque()
         ]
         dgim = Dgim(6)
-        dgim.timestamp = crt_timestamp
-        dgim.queues = queues
-        dgim.oldest_bucket_timestamp = crt_timestamp - 4
+        dgim._timestamp = crt_timestamp
+        dgim._queues = queues
+        dgim._oldest_bucket_timestamp = crt_timestamp - 4
         self.assertEquals(3, dgim.nb_buckets)
         dgim.update(0)
         self.assertEquals(3, dgim.nb_buckets)
@@ -84,10 +84,10 @@ class TestDgim(unittest.TestCase):
 
     def test_r_computation(self):
         dgim = Dgim(10, 0.5)
-        self.assertEqual(2, dgim.r)
+        self.assertEqual(2, dgim._r)
 
         dgim = Dgim(10, 0.1)
-        self.assertEqual(10, dgim.r)
+        self.assertEqual(10, dgim._r)
 
     def test_invalid_error_rates(self):
         self.assertRaises(ValueError, Dgim, 10, 0)
@@ -96,11 +96,11 @@ class TestDgim(unittest.TestCase):
 
     def test_is_bucket_too_old(self):
         dgim = Dgim(10)
-        dgim.timestamp = 15
+        dgim._timestamp = 15
         self.assertFalse(dgim._is_bucket_too_old(6))
         self.assertTrue(dgim._is_bucket_too_old(5))
         self.assertTrue(dgim._is_bucket_too_old(16))
 
-        dgim.timestamp = 5
+        dgim._timestamp = 5
         self.assertFalse(dgim._is_bucket_too_old(16))
         self.assertTrue(dgim._is_bucket_too_old(15))

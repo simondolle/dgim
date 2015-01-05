@@ -36,8 +36,8 @@ class Dgim(object):
         self.error_rate = error_rate
 
         #the maximum number of buckets of the same size
-        self.r = math.ceil(1/error_rate)
-        self.r = max(self.r, 2)
+        self._r = math.ceil(1/error_rate)
+        self._r = max(self._r, 2)
 
         # the datastructure to store the buckets
         # it is an array of queues
@@ -46,17 +46,17 @@ class Dgim(object):
         # this structure makes it easy to :
         # - know how many bucket of the same size there is
         # - update a queue of bucket
-        self.queues = []
+        self._queues = []
         if N == 0:
             max_index = -1
         else:
             max_index = int(math.ceil(math.log(N)/math.log(2)))
 
         for i in range(max_index + 1):
-            self.queues.append(deque())
+            self._queues.append(deque())
 
-        self.timestamp = 0
-        self.oldest_bucket_timestamp = -1  # No bucket so far
+        self._timestamp = 0
+        self._oldest_bucket_timestamp = -1  # No bucket so far
 
     def update(self, elt):
         """Update the stream with one element.
@@ -65,27 +65,27 @@ class Dgim(object):
         """
         if self.N == 0:
             return
-        self.timestamp = (self.timestamp + 1) % (2 * self.N)
+        self._timestamp = (self._timestamp + 1) % (2 * self.N)
         #check if oldest bucket should be removed
-        if self.oldest_bucket_timestamp >= 0 and self._is_bucket_too_old(self.oldest_bucket_timestamp):
+        if self._oldest_bucket_timestamp >= 0 and self._is_bucket_too_old(self._oldest_bucket_timestamp):
             self._drop_oldest_bucket()
         if elt is not True:
             #nothing to do
             return
 
-        carry_over = self.timestamp
-        if self.oldest_bucket_timestamp == -1:
-            self.oldest_bucket_timestamp = self.timestamp
-        for queue in self.queues:
+        carry_over = self._timestamp
+        if self._oldest_bucket_timestamp == -1:
+            self._oldest_bucket_timestamp = self._timestamp
+        for queue in self._queues:
             queue.appendleft(carry_over)
-            if len(queue) <= self.r:
+            if len(queue) <= self._r:
                 break
             last = queue.pop()
             second_last = queue.pop()
             # merge last two buckets.
             carry_over = second_last
-            if last == self.oldest_bucket_timestamp:
-                self.oldest_bucket_timestamp = second_last
+            if last == self._oldest_bucket_timestamp:
+                self._oldest_bucket_timestamp = second_last
 
     def get_count(self):
         """Returns an estimate of the number of "True"
@@ -95,7 +95,7 @@ class Dgim(object):
         result = 0
         max_value = 0
         power_of_two = 1
-        for queue in self.queues:
+        for queue in self._queues:
             queue_length = len(queue)
             if queue_length > 0:
                 max_value = power_of_two
@@ -111,7 +111,7 @@ class Dgim(object):
         :returns: bool
         """
         # the buckets are stored modulo 2 * N
-        return (self.timestamp - bucket_timestamp) % (2 * self.N) >= self.N
+        return (self._timestamp - bucket_timestamp) % (2 * self.N) >= self.N
 
     @property
     def nb_buckets(self):
@@ -119,21 +119,21 @@ class Dgim(object):
         :returns: int
         """
         result = 0
-        for queue in self.queues:
+        for queue in self._queues:
             result += len(queue)
         return result
 
     def _drop_oldest_bucket(self):
         """Drop oldest bucket timestamp."""
-        for queue in reversed(self.queues):
+        for queue in reversed(self._queues):
             if len(queue) > 0:
                 queue.pop()
                 break
         #update oldest bucket timestamp
-        self.oldest_bucket_timestamp = -1
-        for queue in reversed(self.queues):
+        self._oldest_bucket_timestamp = -1
+        for queue in reversed(self._queues):
             if len(queue) > 0:
-                self.oldest_bucket_timestamp = queue[-1]
+                self._oldest_bucket_timestamp = queue[-1]
                 break
 
 
