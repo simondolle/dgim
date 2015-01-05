@@ -9,10 +9,10 @@ def profile_dgim(dgim, stream):
 def main():
 
     N = 1000000
-    r = 2
+    error_rate = 0.5
     length = 2 * N
 
-    dgim = Dgim(N=N, r=r)
+    dgim = Dgim(N=N, error_rate=error_rate)
     stream = generate_random_stream(length=length)
     time_start = time.time()
     profile_dgim(dgim, stream)
