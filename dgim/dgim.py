@@ -19,7 +19,9 @@ class Dgim(object):
     def __init__(self, N, error_rate=0.5):
         """Constructor
 
-        :param N: size of the sliding window
+        :param N: sliding window width.
+                  The algorithm will return an estimate of the number of "True"
+                  in the last N elements of the stream.
         :type N: int
         :param error_rate: the maximum error made by the algorithm.
         The error rate is in ]0, 1]
