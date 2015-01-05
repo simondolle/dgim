@@ -18,6 +18,7 @@ Features
 --------
 
 * Estimation of the number of "True" statements in the last N element of a boolean stream
+* Low memory footprint.
 * Configurable error rate
 
 Installation
