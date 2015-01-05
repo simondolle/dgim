@@ -1,5 +1,7 @@
 import unittest
 import itertools
+from collections import deque
+
 from dgim import Dgim
 from dgim.utils import generate_random_stream
 
@@ -13,7 +15,7 @@ class ExactAlgorithm(object):
         :type N: int
         """
         self.N = N
-        self.sliding_window = []
+        self.sliding_window = deque()
 
     def update(self, elt):
         """Update the stream with one element.
@@ -22,7 +24,7 @@ class ExactAlgorithm(object):
         """
         self.sliding_window.append(elt)
         if len(self.sliding_window) > self.N:
-            self.sliding_window.pop(0)
+            self.sliding_window.popleft()
 
     def get_count(self):
         """Returns an estimate of the number of "True"
