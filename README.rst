@@ -12,7 +12,8 @@ dgim
         :target: https://pypi.python.org/pypi/dgim
 
 
-Python implementation of the dgim algorithm: Compact datastructure to estimate the number of "True" in the last N elements of a boolean stream.
+Python implementation of the DGIM algorithm: 
+a compact datastructure to estimate the number of `True` statements in the last N elements of a boolean stream.
 
 Features
 --------
