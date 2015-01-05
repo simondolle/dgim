@@ -33,8 +33,9 @@ class Dgim(object):
         self.N = N
 
         if not (0 < error_rate <= 1):
-            raise ValueError(
-                    "Invalid value for error_rate: {}. Error rate should be in ]0, 1].".format(error_rate))
+            error_msg = ("Invalid value for error_rate: {}. "
+                         "Error rate should be in ]0, 1].".format(error_rate))
+            raise ValueError(error_msg)
 
         self.error_rate = error_rate
 
@@ -70,7 +71,8 @@ class Dgim(object):
             return
         self._timestamp = (self._timestamp + 1) % (2 * self.N)
         #check if oldest bucket should be removed
-        if self._oldest_bucket_timestamp >= 0 and self._is_bucket_too_old(self._oldest_bucket_timestamp):
+        if (self._oldest_bucket_timestamp >= 0 and
+                self._is_bucket_too_old(self._oldest_bucket_timestamp)):
             self._drop_oldest_bucket()
         if elt is not True:
             #nothing to do
