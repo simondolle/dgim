@@ -77,8 +77,8 @@ class Dgim(object):
             return
         self.timestamp = (self.timestamp + 1) % (2 * self.N)
         #check if oldest bucket should be removed
-        if self.oldest_bucket_timestamp >= 0 and self.is_bucket_too_old(self.oldest_bucket_timestamp):
-            self.drop_oldest_bucket()
+        if self.oldest_bucket_timestamp >= 0 and self._is_bucket_too_old(self.oldest_bucket_timestamp):
+            self._drop_oldest_bucket()
         if elt is not True:
             #nothing to do
             return
@@ -97,7 +97,7 @@ class Dgim(object):
             if last == self.oldest_bucket_timestamp:
                 self.oldest_bucket_timestamp = second_last
 
-    def is_bucket_too_old(self, bucket_timestamp):
+    def _is_bucket_too_old(self, bucket_timestamp):
         """Check if a bucket is too old and should be dropped.
         ;param bucket_timestamp: the bucket timestamp
         :type bucket_timestamp: int
@@ -106,7 +106,7 @@ class Dgim(object):
         # the buckets are stored modulo 2 * N
         return (self.timestamp - bucket_timestamp) % (2 * self.N) >= self.N
 
-    def drop_oldest_bucket(self):
+    def _drop_oldest_bucket(self):
         """Drop oldest bucket timestamp."""
         for queue in reversed(self.queues):
             if len(queue) > 0:

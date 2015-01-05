@@ -97,10 +97,10 @@ class TestDgim(unittest.TestCase):
     def test_is_bucket_too_old(self):
         dgim = Dgim(10)
         dgim.timestamp = 15
-        self.assertFalse(dgim.is_bucket_too_old(6))
-        self.assertTrue(dgim.is_bucket_too_old(5))
-        self.assertTrue(dgim.is_bucket_too_old(16))
+        self.assertFalse(dgim._is_bucket_too_old(6))
+        self.assertTrue(dgim._is_bucket_too_old(5))
+        self.assertTrue(dgim._is_bucket_too_old(16))
 
         dgim.timestamp = 5
-        self.assertFalse(dgim.is_bucket_too_old(16))
-        self.assertTrue(dgim.is_bucket_too_old(15))
+        self.assertFalse(dgim._is_bucket_too_old(16))
+        self.assertTrue(dgim._is_bucket_too_old(15))
