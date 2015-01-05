@@ -53,8 +53,7 @@ class Dgim(object):
         else:
             max_index = int(math.ceil(math.log(N)/math.log(2)))
 
-        for i in range(max_index + 1):
-            self._queues.append(deque())
+        self._queues = [deque() for _ in range(max_index + 1)]
 
         self._timestamp = 0
         self._oldest_bucket_timestamp = -1  # No bucket so far

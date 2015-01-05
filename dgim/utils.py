@@ -7,5 +7,5 @@ def generate_random_stream(length):
     :type length: int
     :returns: iterator
     """
-    for i in range(length):
+    for _ in range(length):
         yield bool(random.randint(0, 1))
