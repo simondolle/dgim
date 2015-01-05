@@ -19,7 +19,7 @@ Features
 
 * Estimation of the number of "True" statements in the last N element of a boolean stream
 * Low memory footprint.
-* Configurable error rate
+* Tunable error rate (the lower the error rate, the higher the memory footprint)
 
 Installation
 ------------
