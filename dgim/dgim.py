@@ -18,6 +18,7 @@ class Dgim(object):
 
     def __init__(self, N, error_rate=0.5):
         """Constructor
+
         :param N: size of the sliding window
         :type N: int
         :param error_rate: the maximum error made by the algorithm.
@@ -60,6 +61,7 @@ class Dgim(object):
 
     def update(self, elt):
         """Update the stream with one element.
+
         :param elt: the latest element of the stream
         :type elt: bool
         """
@@ -90,7 +92,8 @@ class Dgim(object):
     def get_count(self):
         """Returns an estimate of the number of "True"
         in the last N elements of the stream.
-        :returns: int
+
+        :rtype: int
         """
         result = 0
         max_value = 0
@@ -106,9 +109,10 @@ class Dgim(object):
 
     def _is_bucket_too_old(self, bucket_timestamp):
         """Check if a bucket is too old and should be dropped.
+
         ;param bucket_timestamp: the bucket timestamp
         :type bucket_timestamp: int
-        :returns: bool
+        :rtype: bool
         """
         # the buckets are stored modulo 2 * N
         return (self._timestamp - bucket_timestamp) % (2 * self.N) >= self.N
@@ -116,7 +120,8 @@ class Dgim(object):
     @property
     def nb_buckets(self):
         """Returns the number of buckets.
-        :returns: int
+
+        :rtype: int
         """
         result = 0
         for queue in self._queues:
