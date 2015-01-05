@@ -58,16 +58,6 @@ class Dgim(object):
         self.timestamp = 0
         self.oldest_bucket_timestamp = -1  # No bucket so far
 
-    @property
-    def nb_buckets(self):
-        """Returns the number of buckets.
-        :returns: int
-        """
-        result = 0
-        for queue in self.queues:
-            result += len(queue)
-        return result
-
     def update(self, elt):
         """Update the stream with one element.
         :param elt: the latest element of the stream
@@ -97,28 +87,6 @@ class Dgim(object):
             if last == self.oldest_bucket_timestamp:
                 self.oldest_bucket_timestamp = second_last
 
-    def _is_bucket_too_old(self, bucket_timestamp):
-        """Check if a bucket is too old and should be dropped.
-        ;param bucket_timestamp: the bucket timestamp
-        :type bucket_timestamp: int
-        :returns: bool
-        """
-        # the buckets are stored modulo 2 * N
-        return (self.timestamp - bucket_timestamp) % (2 * self.N) >= self.N
-
-    def _drop_oldest_bucket(self):
-        """Drop oldest bucket timestamp."""
-        for queue in reversed(self.queues):
-            if len(queue) > 0:
-                queue.pop()
-                break
-        #update oldest bucket timestamp
-        self.oldest_bucket_timestamp = -1
-        for queue in reversed(self.queues):
-            if len(queue) > 0:
-                self.oldest_bucket_timestamp = queue[-1]
-                break
-
     def get_count(self):
         """Returns an estimate of the number of "True"
         in the last N elements of the stream.
@@ -135,3 +103,37 @@ class Dgim(object):
             power_of_two = power_of_two << 1
         result -= math.floor(max_value/2)
         return int(result)
+
+    def _is_bucket_too_old(self, bucket_timestamp):
+        """Check if a bucket is too old and should be dropped.
+        ;param bucket_timestamp: the bucket timestamp
+        :type bucket_timestamp: int
+        :returns: bool
+        """
+        # the buckets are stored modulo 2 * N
+        return (self.timestamp - bucket_timestamp) % (2 * self.N) >= self.N
+
+    @property
+    def nb_buckets(self):
+        """Returns the number of buckets.
+        :returns: int
+        """
+        result = 0
+        for queue in self.queues:
+            result += len(queue)
+        return result
+
+    def _drop_oldest_bucket(self):
+        """Drop oldest bucket timestamp."""
+        for queue in reversed(self.queues):
+            if len(queue) > 0:
+                queue.pop()
+                break
+        #update oldest bucket timestamp
+        self.oldest_bucket_timestamp = -1
+        for queue in reversed(self.queues):
+            if len(queue) > 0:
+                self.oldest_bucket_timestamp = queue[-1]
+                break
+
+
